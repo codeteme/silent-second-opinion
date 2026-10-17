@@ -1,0 +1,19 @@
+# macOS / Python
+.DS_Store
+__pycache__/
+*.pyc
+.venv/
+.ipynb_checkpoints/
+
+# Run outputs (live on Drive, not in the repo)
+*.jsonl
+audit_sheet*.csv
+audit_key.csv
+silent_second_opinion_outputs/
+
+# Secrets
+.env
+*token*
+
+# Working copies of validation sheets (contain model text; regenerable from the run)
+validation/_work/

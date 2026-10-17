@@ -1,0 +1,5 @@
+# Local (tests, analysis):  pandas, numpy, scipy
+# Colab (generation, judge): torch + transformers come with Colab; the notebook installs the rest.
+pandas>=2.0
+numpy>=1.24
+scipy>=1.10
