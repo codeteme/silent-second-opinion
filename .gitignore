@@ -25,3 +25,4 @@ data_cache/
 poster/*.html
 poster/poster_data.json
 poster/*.png
+talk/deck.html

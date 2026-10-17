@@ -282,9 +282,10 @@ CSS = FONTS + f"""
 html, body {{ margin: 0; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }}
 body {{ font-family: "Open Sans", sans-serif; color: {INK}; }}
 .poster {{ width: 24in; height: 24in; overflow: hidden; background: #fff; display: flex; flex-direction: column; }}
-header {{ background: {NAVY}; color: #fff; padding: 0.36in 0.7in 0.32in; height: 3.2in; display: flex; flex-direction: column; justify-content: center; }}
+header {{ position: relative; background: {NAVY}; color: #fff; padding: 0.36in 0.7in 0.32in; height: 3.2in; display: flex; flex-direction: column; justify-content: center; }}
 h1 {{ font-family: "EB Garamond", serif; font-size: 82pt; line-height: 1.0; margin: 0 0 0.14in; font-weight: 700; max-width: 17.4in; }}
 .byline {{ font-size: 27pt; font-weight: 600; }}
+.hlogo {{ position: absolute; right: 0.7in; top: 0.4in; width: 2.4in; height: 2.4in; background: #fff; padding: 0.16in; object-fit: contain; }}
 .banner {{ display: grid; grid-template-columns: 1.2fr 1.2fr 1fr; gap: 0.4in; align-items: center; padding: 0.2in 0.7in; height: 2.55in; border-bottom: 0.05in solid {GRID}; }}
 .stat .n {{ font-family: "EB Garamond", serif; font-size: 112pt; line-height: .95; font-weight: 700; }}
 .stat .t {{ font-size: 24pt; line-height: 1.2; margin-top: 0.06in; }}
@@ -314,6 +315,7 @@ footer b {{ color: {INK}; }}
 BODY = f"""
 <div class="poster">
 <header>
+  <img class="hlogo" src="assets/duke-shield.png" alt="Duke University shield">
   <h1>When misleading context changes the answer, does MedGemma say so?</h1>
   <div class="byline">Temesgen Tewolde &nbsp;·&nbsp; Duke University &nbsp;·&nbsp; AIPI 590: Explainable AI </div>
 </header>
@@ -406,6 +408,8 @@ body {{ font-family: "Open Sans", sans-serif; color: {INK}; }}
 .poster {{ width: 24in; height: 24in; overflow: hidden; background: #fff; padding: 0.35in; display: flex; flex-direction: column; gap: 0.24in; }}
 .title {{ background: {NAVY}; color: #fff; height: 3.2in; display: grid; grid-template-columns: 3.2in 1fr 3.2in; align-items: center; padding: 0.2in 0.25in; flex: none; }}
 .title .mid {{ text-align: center; }}
+.logo {{ width: 2.7in; height: 2.7in; background: #fff; padding: 0.18in; display: flex; align-items: center; justify-content: center; }}
+.logo img {{ width: 100%; height: 100%; display: block; object-fit: contain; }}
 .title h1 {{ font-family: "EB Garamond", serif; font-size: 66pt; line-height: 1.0; font-weight: 700; margin: 0 0 0.12in; }}
 .title .who {{ font-size: 31pt; font-weight: 700; line-height: 1.15; }}
 .title .inst {{ font-size: 26pt; font-weight: 600; line-height: 1.2; margin-top: 0.03in; }}
@@ -440,7 +444,7 @@ D_FOL_E = f"{int(dt.loc[('thinking', 'evidence')].n_followed)} / {int(dt.loc[('d
 BODY_T = f"""
 <div class="poster">
   <div class="title">
-    <div></div>
+    <div class="logo"><img src="assets/duke-shield.png" alt="Duke University shield"></div>
     <div class="mid">
       <h1>When misleading context changes the answer, does MedGemma say so?</h1>
       <div class="who">Temesgen Tewolde</div>
@@ -541,6 +545,7 @@ css36 += """
 .title h1 { font-size: 76pt; }
 .title .who { font-size: 38pt; }
 .title .inst { font-size: 31pt; }
+.logo { width: 3.4in; height: 3.4in; padding: 0.22in; }
 .cols { grid-template-columns: 1fr 1.25fr 1fr; }
 svg { width: 7.6in; max-width: 100%; height: auto; }
 """
