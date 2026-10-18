@@ -5,14 +5,13 @@ A study of MedGemma 1.5 4B on 200 MedMisBench questions: a fabricated claim vers
 with the model's reasoning on and off. Both cues move the model to the wrong answer about 4 times in 10, and the
 bare assertion is much less often mentioned in the response (62% of followed runs are silent, against 21% for claims).
 
-Temesgen Tewolde, Duke University, AIPI 590 (Explainable AI). Poster, talk and explorer are included.
+Temesgen Tewolde, Duke University, AIPI 590 (Explainable AI). The poster and explorer are included.
 
 | Read | For |
 |---|---|
 | [`SPEC.md`](SPEC.md) | the research question, definitions and the three pre-specified comparisons |
 | [`DESIGN.md`](DESIGN.md) | why each design choice was made, validation, limitations, misuse risks, and an erratum |
 | [`poster/`](poster/) | the printed poster (as printed) and its build script |
-| [`talk/`](talk/) | an 18-slide deck and a 5-minute poster script |
 | [`explorer/`](explorer/) | a single page for browsing every question, trace, response and judge verdict |
 
 ## Reproduce the numbers in one minute (no GPU)
@@ -67,4 +66,4 @@ deliberately false medical statements: for evaluation only, not clinical advice.
 
 ## Note on the printed poster
 A parsing bug found after the poster was printed moves a few poster figures by one point; no conclusion changes.
-See the erratum in `DESIGN.md`. This README, the talk and the explorer use the corrected numbers.
+See the erratum in `DESIGN.md`. This README and the explorer use the corrected numbers.
