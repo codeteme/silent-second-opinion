@@ -9,10 +9,41 @@ Temesgen Tewolde, Duke University, AIPI 590 (Explainable AI). The poster and exp
 
 | Read | For |
 |---|---|
+| [`WRITEUP.md`](WRITEUP.md) | the full paper-style write-up: related work, method, results, judge validation, limitations |
 | [`SPEC.md`](SPEC.md) | the research question, definitions and the three pre-specified comparisons |
 | [`DESIGN.md`](DESIGN.md) | why each design choice was made, validation, limitations, misuse risks, and an erratum |
 | [`poster/`](poster/) | the printed poster (as printed) and its build script |
 | [`explorer/`](explorer/) | a single page for browsing every question, trace, response and judge verdict |
+
+## Explorer
+
+![Explorer demo: one question through its four versions, then a filter to the silent cases](docs/explorer-demo.gif)
+
+Browse all 200 questions: each in four versions (clean, sham, fabricated claim, bare assertion), the reasoning trace and
+response side by side, and the judge's verdict with the matched words highlighted. Filter to, for example, every case
+where the model followed the assertion and the response never mentions it. Build and open it locally:
+
+```
+python explorer/build_explorer.py    # needs the full run outputs in data_cache/
+open explorer/index.html             # one offline file, about 10 MB
+```
+
+`explorer/index.html` is not committed because it embeds MedMisBench questions (dataset licence "other"). The GIF above
+shows one example question, the same one as on the poster.
+
+## How this relates to prior work
+
+The design follows Linzmayer & Elhadad (2026), who study a fabricated-evidence cue and a bare-assertion cue on
+MedMisBench in three larger reasoning models. This project asks the same disclosure question of **one small open medical
+model, MedGemma 1.5 4B, with its reasoning switched on and off in place**, and adds a sham baseline. It agrees on the
+main disclosure pattern (the response says less than the trace, and the assertion is said less than evidence), and
+differs on one point: here the assertion is followed slightly *less* than the evidence cue, where they find it followed
+more. They also tested response-only monitors (78% of corrupted decisions caught from an open trace against at most 32%
+from any response); this project does not, so for MedGemma that implication remains an inference from disclosure rates.
+Closest literature: Turpin et al. (NeurIPS 2023) and Chen et al. (2025) on whether stated reasoning mentions the hint that
+drove the answer; Young (2026) on thinking tokens vs answers; Zaman & Srivastava (ACL 2026) on why hint verbalization is
+an imperfect faithfulness proxy; Korbak et al. (2025) on trace monitoring. Full citations are in
+[`WRITEUP.md`](WRITEUP.md#references).
 
 ## Reproduce the numbers in one minute (no GPU)
 

@@ -207,7 +207,7 @@ function render(){
   if (!vis.find(x => x.id===state.sel)) { state.sel = vis.length ? vis[0].id : null; state.view = state.cue; }
   aggregate(); renderList(vis); renderDetail();
   const s = $('list').querySelector('.row.sel'); if (s) s.scrollIntoView({block:'nearest'});
-  history.replaceState(null, '', `#${state.sel||''}|${state.mode}|${state.view||state.cue}`);
+  history.replaceState(null, '', `#${state.sel||''}|${state.mode}|${state.view||state.cue}|${state.out}`);
 }
 
 document.addEventListener('keydown', e => {
@@ -218,7 +218,8 @@ document.addEventListener('keydown', e => {
 });
 
 (function init(){
-  const [id, mode, view] = location.hash.slice(1).split('|');
+  const [id, mode, view, out] = location.hash.slice(1).split('|');
+  if (out && OUTS[out]) state.out = out;
   if (mode && MODES[mode]) state.mode = mode;
   if (view && ['none','sham','evidence','answer'].includes(view)){ state.view = view; if (view==='evidence'||view==='answer') state.cue = view; }
   if (id && ITEMS.find(x => x.id===id)) state.sel = id;

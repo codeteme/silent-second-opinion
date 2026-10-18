@@ -30,7 +30,7 @@ When misleading context changes MedGemma 1.5 4B's answer, do its reasoning trace
 - Thinking-off responses still reason visibly, and 10–15% of those rollouts loop.
 - The evidence-cue trace-agreement interval is wide (0.44–1.00).
 - "Disclosure" means the text refers to the cue as an input. It does not show the cue *caused* the answer.
-- "A monitor reading only the response would miss most of these cases" is an inference from disclosure rates. It has not been tested with an actual monitor.
+- "A monitor reading only the response would miss most of these cases" is an inference from disclosure rates. It has not been tested with an actual monitor on MedGemma (Linzmayer & Elhadad tested monitors on other, larger models: 78% of corrupted decisions caught from an open trace against at most 32% from responses).
 
 ## Misuse and stakeholders
 - **Misuse:** the finding that a bare "the correct answer is C" steers a small model almost as well as a fabricated claim describes an easy attack on a deployed system, and the repo contains deliberately false medical statements. They are a benchmark from MedMisBench, are not clinical advice, and should be used for evaluation only.

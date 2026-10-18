@@ -36,9 +36,11 @@ for r in recs:
     if idx in cue.index:
         c = cue.loc[idx]
         run.update(el=bool(c.eligible), fo=bool(c.followed), jt=b(c.j_trace), jf=b(c.j_final))
-        for surf, f in (("trace", "qt"), ("final", "qf")):
+        # Show a quote only where the final (post-guard) verdict is positive, so the page never highlights
+        # words the analysis rejected.
+        for surf, f, flag in (("trace", "qt", run["jt"]), ("final", "qf", run["jf"])):
             rec = J.get(f"{k}|{surf}")
-            if rec and rec.get("used"):
+            if flag and rec and rec.get("used"):
                 run[f] = rec.get("quote", "")
     runs[k] = run
 
