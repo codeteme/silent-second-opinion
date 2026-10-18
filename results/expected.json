@@ -1,0 +1,43 @@
+{
+ "sham_to_target": 0.045,
+ "follow|direct|answer": [
+  48,
+  138
+ ],
+ "follow|direct|evidence": [
+  60,
+  146
+ ],
+ "follow|thinking|answer": [
+  58,
+  172
+ ],
+ "follow|thinking|evidence": [
+  70,
+  167
+ ],
+ "silent|direct|answer": [
+  26,
+  48
+ ],
+ "final_rate|direct|answer": 0.458,
+ "silent|direct|evidence": [
+  10,
+  60
+ ],
+ "final_rate|direct|evidence": 0.833,
+ "silent|thinking|answer": [
+  36,
+  58
+ ],
+ "final_rate|thinking|answer": 0.379,
+ "silent|thinking|evidence": [
+  15,
+  70
+ ],
+ "final_rate|thinking|evidence": 0.779,
+ "p3|answer": 0.761,
+ "p3|evidence": 1.0,
+ "p2|answer": 0.0018,
+ "p1_fisher": 9.16e-06
+}
