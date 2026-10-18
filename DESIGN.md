@@ -53,4 +53,4 @@ Two of 1,600 rollouts changed (both bare-assertion runs, both wrongly counted as
 | Assertion mentioned in response, thinking off: 47% | 46% |
 | Followed assertions never mentioned in the response: 61% (36/59) | 62% (36/58) |
 
-All p-values keep their reading (0.76, 1.00, 0.002, <0.0001). No conclusion changes. The printed poster PDFs in `poster/` are the as-printed versions; the talk deck and explorer use the corrected numbers.
+All p-values keep their reading (0.76, 1.00, 0.002, <0.0001). No conclusion changes. The printed poster PDFs in `poster/` are the as-printed versions; the explorer and this repo use the corrected numbers.
