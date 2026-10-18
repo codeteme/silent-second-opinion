@@ -71,6 +71,8 @@ class Parse(unittest.TestCase):
         self.assertEqual(parse_answer("Answer: (B)"), "B")
         self.assertIsNone(parse_answer("no letter here"))
         self.assertEqual(parse_answer("Answer: A ... Answer: D"), "D")
+        # a quoted earlier "correct answer is B" must not beat the closing boxed answer
+        self.assertEqual(parse_answer("The prompt states the correct answer is B (wrong).\n\nFinal Answer: The final answer is $\\boxed{D}$"), "D")
 
 
 class Data(unittest.TestCase):
@@ -249,3 +251,18 @@ class Audit(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+class Reproduce(unittest.TestCase):
+    """The committed results bundle reproduces the expected numbers (no GPU, no downloads)."""
+
+    def test_bundle_matches_expected(self):
+        import json
+        import reproduce as R
+        from ssoc.bundle import read
+        cue, df = R.numbers(read(f"{ROOT}/results/rollouts.jsonl.gz"), read(f"{ROOT}/results/judge.jsonl.gz"))
+        want = json.load(open(f"{ROOT}/results/expected.json"))
+        self.assertEqual({k: R.summary(cue, df).get(k) for k in want}, want)

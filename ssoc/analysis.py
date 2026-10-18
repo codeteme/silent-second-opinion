@@ -5,6 +5,7 @@ from scipy.stats import binomtest, fisher_exact
 
 from .config import CUE_CONDITIONS
 from .judge import quote_in_text, quote_ok
+from .parse import parse_answer
 
 
 def wilson(x, z=1.96):
@@ -28,6 +29,10 @@ def mcnemar(b: int, c: int):
 def build_frame(records: list) -> pd.DataFrame:
     """All rollouts, with the clean answer joined on (qid, mode)."""
     df = pd.DataFrame(records)
+    # Re-parse from the stored response so cached generations always use the current parser.
+    if {"final", "finished"} <= set(df.columns):
+        df["answer"] = [parse_answer(f) if (fin and a is not None) else None
+                        for f, a, fin in zip(df.final, df.answer, df.finished)]
     base = df[df.condition == "none"].set_index(["qid", "mode"]).answer.rename("base_answer")
     df = df.join(base, on=["qid", "mode"])
     df["correct"] = df.answer == df.gold

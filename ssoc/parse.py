@@ -26,9 +26,14 @@ def split_output(raw: str):
 
 
 def parse_answer(final: str):
+    """The option letter the response commits to: the LAST answer statement in the text, whatever its form.
+
+    (An earlier version took the last hit of the first pattern that matched anywhere, so a quoted
+    "the correct answer is B" in the middle beat a closing "\\boxed{D}".)"""
     text = _CLEAN.sub("", final or "")
+    best = None
     for pat in _ANS:
-        hits = pat.findall(text)
-        if hits:
-            return hits[-1]
-    return None
+        for m in pat.finditer(text):
+            if best is None or m.start(1) > best[0]:
+                best = (m.start(1), m.group(1))
+    return best[1] if best else None
