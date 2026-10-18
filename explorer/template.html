@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Silent Second Opinion Explorer</title>
+<link rel="stylesheet" href="../poster/fonts/fonts.css">
+<style>
+:root { --navy:#012169; --royal:#00539B; --copper:#C84E00; --ink:#000; --panel:#F3F2F1; --line:#C9CED8; --white:#fff;
+        --gray:#5b6577; }
+* { box-sizing: border-box }
+html, body { margin:0; height:100% }
+body { font-family:'Open Sans',system-ui,sans-serif; color:var(--ink); background:var(--panel); font-size:16px; line-height:1.45;
+       display:flex; flex-direction:column }
+header { background:var(--navy); color:#fff; padding:14px 24px; display:flex; align-items:baseline; gap:18px; flex-wrap:wrap }
+header h1 { font:700 28px 'EB Garamond',serif; margin:0 }
+header span { font-size:14px }
+.intro { background:#fff; border-bottom:3px solid var(--navy); padding:10px 24px; font-size:14.5px }
+.intro summary { cursor:pointer; font-weight:700; color:var(--navy) }
+.intro dl { display:grid; grid-template-columns:max-content 1fr; gap:4px 16px; margin:10px 0 4px }
+.intro dt { font-weight:700; color:var(--navy) } .intro dd { margin:0 }
+.bar { display:flex; gap:22px; flex-wrap:wrap; align-items:center; padding:10px 24px; background:#fff; border-bottom:1px solid var(--line) }
+.bar label { font-size:12px; font-weight:700; color:var(--navy); text-transform:uppercase; letter-spacing:.06em; display:block }
+select { font:inherit; padding:5px 8px; border:2px solid var(--navy); background:#fff; color:#000 }
+.seg { display:flex } .seg button { font:600 14px 'Open Sans'; padding:6px 12px; border:2px solid var(--navy); background:#fff; color:var(--navy); cursor:pointer; margin-left:-2px }
+.seg button:first-child { margin-left:0 } .seg button.on { background:var(--navy); color:#fff }
+.agg { margin-left:auto; font-size:14px; max-width:520px }
+main { flex:1; display:flex; min-height:0 }
+#list { width:380px; flex:0 0 380px; overflow:auto; background:#fff; border-right:3px solid var(--navy) }
+.row { padding:9px 14px; border-bottom:1px solid var(--line); cursor:pointer; display:flex; gap:10px; align-items:flex-start }
+.row:hover { background:#eef2f9 } .row.sel { background:#dfe7f5; box-shadow:inset 5px 0 0 var(--navy) }
+.row .t { font-size:13.5px; flex:1 } .row .id { font-size:11px; color:var(--gray) }
+.badge { font:700 11px 'Open Sans'; padding:2px 7px; border:2px solid; white-space:nowrap; text-transform:uppercase; letter-spacing:.04em }
+.b-silent { background:var(--copper); border-color:var(--copper); color:#fff }
+.b-said { background:var(--royal); border-color:var(--royal); color:#fff }
+.b-resisted { background:#fff; border-color:var(--navy); color:var(--navy) }
+.b-na, .b-unjudged { background:#fff; border-color:var(--line); color:var(--gray) }
+#detail { flex:1; overflow:auto; padding:22px 28px 60px }
+#detail h2 { font:700 26px 'EB Garamond',serif; color:var(--navy); margin:0 0 8px }
+.q { background:#fff; border:2px solid var(--navy); padding:14px 18px; margin-bottom:16px }
+.opts { margin:10px 0 0; padding:0; list-style:none; font-size:14.5px }
+.opts li { padding:2px 0 } .opts .g { font-weight:700; color:var(--navy) } .opts .t { font-weight:700; color:var(--copper) }
+.tag { font-size:11px; font-weight:700; text-transform:uppercase; padding:1px 6px; margin-left:8px; border:2px solid }
+.tag.g { border-color:var(--navy); color:var(--navy) } .tag.t { border-color:var(--copper); color:var(--copper) }
+.versions { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:16px }
+.vc { background:#fff; border:2px solid var(--line); padding:10px 12px; cursor:pointer }
+.vc.on { border-color:var(--navy); box-shadow:0 0 0 2px var(--navy) }
+.vc h4 { margin:0 0 4px; font:700 12px 'Open Sans'; text-transform:uppercase; letter-spacing:.06em; color:var(--navy) }
+.vc .ans { font:700 28px 'EB Garamond',serif }
+.ans.good { color:var(--navy) } .ans.tgt { color:var(--copper) } .ans.oth { color:var(--gray) }
+.vc small { color:var(--gray); display:block }
+.added { background:#fff; border-left:8px solid var(--copper); padding:10px 16px; margin-bottom:12px; font-size:15.5px }
+.added.evi { border-color:var(--royal) } .added.neutral { border-color:var(--gray) }
+.verdict { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:14px }
+.chip { padding:5px 12px; font-weight:700; font-size:14px; border:2px solid var(--navy); background:#fff; color:var(--navy) }
+.chip.bad { border-color:var(--copper); background:var(--copper); color:#fff } .chip.info { border-color:var(--royal); background:var(--royal); color:#fff }
+.panels { display:grid; grid-template-columns:1fr 1fr; gap:16px } .panels.one { grid-template-columns:1fr }
+.panel { background:#fff; border:2px solid var(--navy) }
+.panel h3 { margin:0; padding:8px 14px; background:var(--navy); color:#fff; font:700 15px 'Open Sans'; display:flex; justify-content:space-between }
+.panel h3 span { font-weight:600 } .panel h3 .y { color:#fff } .panel h3 .n { color:#ffd9bf }
+.panel pre { margin:0; padding:12px 14px; white-space:pre-wrap; word-wrap:break-word; font:400 13.5px/1.5 'Open Sans',system-ui,sans-serif; max-height:520px; overflow:auto }
+mark { background:#ffd9bf; color:#000; border-bottom:3px solid var(--copper); padding:0 1px }
+.quote { padding:8px 14px; border-top:2px solid var(--line); font-size:13px; color:var(--gray) }
+.empty { padding:60px; color:var(--gray); text-align:center }
+@media (max-width:1000px){ main{flex-direction:column} #list{width:auto;flex:0 0 220px;border-right:0} .versions{grid-template-columns:1fr 1fr} .panels{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+<header><h1>Silent Second Opinion · Explorer</h1><span>When misleading context changes MedGemma’s answer, does it say so? Browse all 200 questions. Temesgen Tewolde, Duke University.</span></header>
+<details class="intro"><summary>How to read this page</summary>
+<dl>
+<dt>Question</dt><dd>A medical exam question with one correct answer. A made-up statement was written for one specific <b>wrong</b> option, the <b>target</b>.</dd>
+<dt>Four versions</dt><dd><b>Clean</b> (nothing added), <b>Sham</b> (an irrelevant sentence), <b>Claim</b> (a fabricated clinical statement favoring the target), <b>Assertion</b> (“The correct answer is C”, no content). Click a card to open it.</dd>
+<dt>Followed</dt><dd>The model’s clean answer was not the target, but with the added sentence it chose the target.</dd>
+<dt>Said so / Silent</dt><dd>Among followed runs: does the text refer to the added sentence as a source? A second model (Qwen3-14B) judges and the matched words are <mark>highlighted</mark>. <b>Silent</b> means the response never mentions it.</dd>
+<dt>Caution</dt><dd>The added sentences are deliberately false medical statements, for evaluation only, not clinical advice. Verdicts come from an LLM judge checked against LLM annotators, not human labels.</dd>
+</dl></details>
+<div class="bar">
+  <div><label>Added sentence</label><div class="seg" id="cueSeg"></div></div>
+  <div><label>Model mode</label><div class="seg" id="modeSeg"></div></div>
+  <div><label>Show</label><select id="outSel"></select></div>
+  <div><label>Source framing</label><select id="provSel"></select></div>
+  <div class="agg" id="agg"></div>
+</div>
+<main><div id="list"></div><div id="detail"></div></main>
+<script>
+const DATA = /*__DATA__*/null;
+const ITEMS = DATA.items, RUNS = DATA.runs;
+const CUES = {evidence:'Fabricated claim', answer:'Bare assertion'};
+const MODES = {thinking:'Thinking on', direct:'Thinking off'};
+const OUTS = {all:'All questions', followed:'Followed the sentence', silent:'Followed and silent', said:'Followed and said so', resisted:'Resisted', na:'Not eligible'};
+const state = {cue:'answer', mode:'thinking', out:'all', prov:'all', sel:null, view:null};
+const $ = id => document.getElementById(id);
+const esc = s => (s ?? '').replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const run = (it, mode, cond) => RUNS[`${it.id}|${mode}|${cond}`];
+
+function provOf(it){ return (it.prov||'').split(' ')[0]; }
+function outcome(it, mode, cue){
+  const r = run(it, mode, cue);
+  if (!r || !r.ok || r.a == null && !r.el) return 'na';
+  if (!r.el) return 'na';
+  if (!r.fo) return 'resisted';
+  if (r.jf === true) return 'said';
+  if (r.jf === false) return 'silent';
+  return 'unjudged';
+}
+const BADGE = {silent:'silent', said:'said so', resisted:'resisted', na:'n/a', unjudged:'unjudged'};
+
+function seg(el, opts, key, onchange){
+  el.innerHTML = '';
+  for (const [k, label] of Object.entries(opts)){
+    const b = document.createElement('button'); b.textContent = label; b.className = state[key]===k ? 'on' : '';
+    b.onclick = () => { state[key] = k; onchange(); }; el.appendChild(b);
+  }
+}
+function fillSelect(el, opts, key){
+  el.innerHTML = Object.entries(opts).map(([k,v]) => `<option value="${k}">${v}</option>`).join('');
+  el.value = state[key]; el.onchange = () => { state[key] = el.value; render(); };
+}
+const provs = {all:'All'}; for (const p of [...new Set(ITEMS.map(provOf))].sort()) provs[p] = p;
+
+function visible(){
+  return ITEMS.filter(it => {
+    if (state.prov !== 'all' && provOf(it) !== state.prov) return false;
+    const o = outcome(it, state.mode, state.cue);
+    if (state.out==='all') return true;
+    if (state.out==='followed') return o==='said'||o==='silent'||o==='unjudged';
+    return o===state.out;
+  });
+}
+
+function aggregate(){
+  let el=0, fo=0, said=0, sil=0;
+  for (const it of ITEMS){
+    const o = outcome(it, state.mode, state.cue);
+    if (o!=='na') el++;
+    if (o==='said'||o==='silent'||o==='unjudged') fo++;
+    if (o==='said') said++; if (o==='silent') sil++;
+  }
+  $('agg').innerHTML = `<b>All 200 questions · ${CUES[state.cue]} · ${MODES[state.mode]}:</b> followed in <b>${fo}</b> of ${el} eligible; <b>${sil}</b> silent, <b>${said}</b> said so.`;
+}
+
+function renderList(vis){
+  const L = $('list');
+  if (!vis.length){ L.innerHTML = '<div class="empty">No questions match.</div>'; return; }
+  L.innerHTML = vis.map(it => {
+    const o = outcome(it, state.mode, state.cue);
+    return `<div class="row ${it.id===state.sel?'sel':''}" data-id="${it.id}"><div class="t"><div class="id">${it.id.replace('MEDMISQA_','Q')} · ${provOf(it)}</div>${esc(it.q.slice(0,95))}…</div><span class="badge b-${o}">${BADGE[o]}</span></div>`;
+  }).join('');
+  L.querySelectorAll('.row').forEach(r => r.onclick = () => { state.sel = r.dataset.id; state.view = state.cue; render(); });
+}
+
+function hl(text, quote){
+  if (!text) return '<i>(empty)</i>';
+  if (!quote) return esc(text);
+  const words = quote.match(/[A-Za-z0-9]+/g);
+  if (!words) return esc(text);
+  try {
+    const m = new RegExp(words.map(w=>w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('[\\W_]+'), 'i').exec(text);
+    if (m) return esc(text.slice(0,m.index)) + '<mark>' + esc(m[0]) + '</mark>' + esc(text.slice(m.index+m[0].length));
+  } catch(e){}
+  return esc(text);
+}
+
+function chipFor(it, r, mode){
+  const bits = [];
+  if (r.el === undefined) return '';
+  if (!r.el) return '<div class="verdict"><span class="chip">Not eligible: the clean answer was already the target, or the run did not finish</span></div>';
+  if (!r.fo) return `<div class="verdict"><span class="chip">Resisted: the model did not move to the target (answered ${r.a ?? '–'})</span></div>`;
+  bits.push(`<span class="chip bad">Followed the sentence → ${r.a}</span>`);
+  bits.push(r.jf===true ? '<span class="chip info">Response says so</span>' : r.jf===false ? '<span class="chip bad">Response is silent</span>' : '<span class="chip">Response not judged</span>');
+  if (mode==='thinking') bits.push(r.jt===true ? '<span class="chip info">Trace says so</span>' : r.jt===false ? '<span class="chip">Trace is silent</span>' : '<span class="chip">Trace not judged</span>');
+  return `<div class="verdict">${bits.join('')}</div>`;
+}
+
+function renderDetail(){
+  const D = $('detail'), it = ITEMS.find(x => x.id===state.sel);
+  if (!it){ D.innerHTML = '<div class="empty">Choose a question on the left.</div>'; return; }
+  const mode = state.mode, view = state.view || state.cue;
+  const names = {none:'Clean', sham:'Sham', evidence:'Claim', answer:'Assertion'};
+  const cards = ['none','sham','evidence','answer'].map(c => {
+    const r = run(it, mode, c) || {};
+    const cls = r.a===it.gold ? 'good' : r.a===it.tgt ? 'tgt' : 'oth';
+    return `<div class="vc ${c===view?'on':''}" data-c="${c}"><h4>${names[c]}</h4><div class="ans ${cls}">${r.a ?? '–'}</div><small>${r.a===it.gold?'correct':r.a===it.tgt?'wrong target':r.a?'other wrong answer':'no answer'}</small></div>`;
+  }).join('');
+  const opts = Object.entries(it.opts).map(([k,v]) => `<li class="${k===it.gold?'g':k===it.tgt?'t':''}">(${k}) ${esc(v)}${k===it.gold?'<span class="tag g">correct</span>':''}${k===it.tgt?'<span class="tag t">wrong target</span>':''}</li>`).join('');
+  const r = run(it, mode, view) || {};
+  const text = view==='none' ? null : it.cues[view];
+  const cls = view==='evidence' ? 'evi' : view==='sham' ? 'neutral' : '';
+  const added = view==='none' ? '<div class="added neutral"><i>Nothing was added to this version.</i></div>'
+    : `<div class="added ${cls}"><b>${names[view]} sentence added after the options:</b><br>${esc(text)}</div>`;
+  const verdict = (view==='evidence'||view==='answer') ? chipFor(it, r, mode) : '';
+  const tracePanel = mode==='thinking' ? `<div class="panel"><h3>Reasoning trace ${r.jt===true?'<span class="y">mentions the sentence</span>':r.jt===false?'<span class="n">silent</span>':''}</h3><pre>${hl(r.tr, r.qt)}</pre>${r.qt?`<div class="quote">Judge’s quote: “${esc(r.qt)}”</div>`:''}</div>` : '';
+  const respPanel = `<div class="panel"><h3>Response ${r.jf===true?'<span class="y">mentions the sentence</span>':r.jf===false?'<span class="n">silent</span>':''}</h3><pre>${hl(r.fi, r.qf)}</pre>${r.qf?`<div class="quote">Judge’s quote: “${esc(r.qf)}”</div>`:''}</div>`;
+  D.innerHTML = `<h2>${it.id.replace('MEDMISQA_','Question ')} · source framing: ${provOf(it)}</h2>
+   <div class="q">${esc(it.q)}<ul class="opts">${opts}</ul></div>
+   <div class="versions">${cards}</div>${added}${verdict}
+   <div class="panels ${mode==='thinking'?'':'one'}">${tracePanel}${respPanel}</div>`;
+  D.querySelectorAll('.vc').forEach(c => c.onclick = () => { state.view = c.dataset.c; if (c.dataset.c==='evidence'||c.dataset.c==='answer') state.cue = c.dataset.c; render(); });
+}
+
+function render(){
+  seg($('cueSeg'), CUES, 'cue', () => { state.view = state.cue; render(); });
+  seg($('modeSeg'), MODES, 'mode', render);
+  fillSelect($('outSel'), OUTS, 'out'); fillSelect($('provSel'), provs, 'prov');
+  const vis = visible();
+  if (!vis.find(x => x.id===state.sel)) { state.sel = vis.length ? vis[0].id : null; state.view = state.cue; }
+  aggregate(); renderList(vis); renderDetail();
+  const s = $('list').querySelector('.row.sel'); if (s) s.scrollIntoView({block:'nearest'});
+  history.replaceState(null, '', `#${state.sel||''}|${state.mode}|${state.view||state.cue}`);
+}
+
+document.addEventListener('keydown', e => {
+  if (!['ArrowDown','ArrowUp'].includes(e.key) || /SELECT/.test(document.activeElement.tagName)) return;
+  const vis = visible(), i = vis.findIndex(x => x.id===state.sel);
+  const j = Math.max(0, Math.min(vis.length-1, i + (e.key==='ArrowDown'?1:-1)));
+  if (vis[j]){ state.sel = vis[j].id; state.view = state.cue; render(); e.preventDefault(); }
+});
+
+(function init(){
+  const [id, mode, view] = location.hash.slice(1).split('|');
+  if (mode && MODES[mode]) state.mode = mode;
+  if (view && ['none','sham','evidence','answer'].includes(view)){ state.view = view; if (view==='evidence'||view==='answer') state.cue = view; }
+  if (id && ITEMS.find(x => x.id===id)) state.sel = id;
+  render();
+})();
+</script>
+</body>
+</html>
