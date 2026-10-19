@@ -12,7 +12,7 @@ Temesgen Tewolde, Duke University, AIPI 590 (Explainable AI). The poster and exp
 | [`WRITEUP.md`](WRITEUP.md) | the full paper-style write-up: related work, method, results, judge validation, limitations |
 | [`SPEC.md`](SPEC.md) | the research question, definitions and the three pre-specified comparisons |
 | [`DESIGN.md`](DESIGN.md) | why each design choice was made, validation, limitations, misuse risks, and an erratum |
-| [`poster/`](poster/) | the printed poster (as printed) and its build script |
+| [`poster/`](poster/) | the printed poster (as printed), a corrected digital 24×36 version with each Results bullet beside its chart (`…-24x36-aligned.pdf`), and the build script |
 | [`explorer/`](explorer/) | a single page for browsing every question, trace, response and judge verdict |
 
 ## Explorer

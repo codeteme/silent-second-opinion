@@ -27,3 +27,4 @@ poster/poster_data.json
 poster/*.png
 talk/
 explorer/index.html
+.Rhistory
